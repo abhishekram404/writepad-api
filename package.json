@@ -1,0 +1,25 @@
+{
+  "name": "write-live",
+  "version": "1.0.0",
+  "description": "Realtime text based collaboration environment",
+  "main": "server.ts",
+  "author": "Keshav Kishor Ram <ramabishek40@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server",
+    "start": "node server"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "nanoid": "^3.3.1",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.21",
+    "ts-node": "^10.6.0",
+    "typescript": "^4.6.2"
+  }
+}
