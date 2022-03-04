@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon server",
-    "start": "node server",
+    "start": "node ./dist/server",
     "build": "tsc"
   },
   "dependencies": {
