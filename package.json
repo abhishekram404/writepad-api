@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon server",
-    "start": "node server"
+    "start": "node server",
+    "build": "tsc"
   },
   "dependencies": {
     "cors": "^2.8.5",
