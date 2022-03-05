@@ -37,8 +37,6 @@ io.on("connection", (socket) => {
     socket.emit("pad joined", code);
     socket.emit("receive text update", roomTexts[code]);
     io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
-    console.log(roomTexts);
-    console.log(code);
 
     setInterval(() => {
       io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
