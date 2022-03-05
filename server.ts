@@ -5,20 +5,11 @@ import { customAlphabet } from "nanoid";
 const generatePadCode = customAlphabet("abcdefghijklmnopqrstuvwxyz", 6);
 const app = express();
 const httpServer = createServer(app);
-import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
-
-// cors({
-//   origin: isProduction
-//     ? "https://abhishekram-404-writepad.netlify.app"
-//     : "http://localhost:3000",
-//   credentials: true,
-// });
-
 const io = new Server(httpServer, {
   cors: {
     origin: isProduction
@@ -28,6 +19,8 @@ const io = new Server(httpServer, {
     credentials: true,
   },
 });
+
+const roomTexts = <{ [key: string]: string }>{};
 
 io.on("connection", (socket) => {
   console.log("A new client connected");
@@ -42,7 +35,10 @@ io.on("connection", (socket) => {
     let code = joinCode || generatePadCode();
     socket.join(code);
     socket.emit("pad joined", code);
+    socket.emit("receive text update", roomTexts[code]);
     io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
+    console.log(roomTexts);
+    console.log(code);
 
     setInterval(() => {
       io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
@@ -58,10 +54,13 @@ io.on("connection", (socket) => {
     );
   });
 
-  socket.on("send text update", ({ padCode, text }) => {
-    console.log(text);
-    socket.to(padCode).emit("receive text update", text);
-  });
+  socket.on(
+    "send text update",
+    ({ padCode, text }: { padCode: string; text: string }) => {
+      roomTexts[padCode] = text;
+      socket.to(padCode).emit("receive text update", text);
+    }
+  );
 
   socket.on("disconnect", () => {
     console.log("A user left");
