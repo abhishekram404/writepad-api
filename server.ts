@@ -12,11 +12,12 @@ dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 
-cors({
-  origin: isProduction
-    ? "https://abhishekram-404-writepad.netlify.app"
-    : "http://localhost:3000",
-});
+// cors({
+//   origin: isProduction
+//     ? "https://abhishekram-404-writepad.netlify.app"
+//     : "http://localhost:3000",
+//   credentials: true,
+// });
 
 const io = new Server(httpServer, {
   cors: {
@@ -24,6 +25,7 @@ const io = new Server(httpServer, {
       ? "https://abhishekram-404-writepad.netlify.app"
       : "http://localhost:3000",
     allowedHeaders: ["Access-Control-Allow-Origin"],
+    credentials: true,
   },
 });
 
@@ -64,6 +66,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("A user left");
   });
+});
+
+app.get("/", (req, res) => {
+  res.status(200).send("Writepad is up and running :) ");
 });
 
 httpServer.listen(4000);
