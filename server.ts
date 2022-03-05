@@ -72,4 +72,6 @@ app.get("/", (req, res) => {
   res.status(200).send("Writepad is up and running :) ");
 });
 
-httpServer.listen(4000);
+const port = process.env.PORT || 4000;
+
+httpServer.listen(port, () => console.log(`Server started on port ${port}`));
