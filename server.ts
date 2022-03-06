@@ -1,12 +1,12 @@
 import express from "express";
 import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 const app = express();
 const httpServer = createServer(app);
 import dotenv from "dotenv";
 import { generatePadCode } from "./utils/utils";
 import Pad from "./models/PadModel";
-import { debounce } from "lodash";
+import { debouncedSaveToDatabase } from "./utils/debouncedSaveToDatabase";
 dotenv.config();
 
 require("./dbConnection");
@@ -22,8 +22,6 @@ const io = new Server(httpServer, {
   },
 });
 
-const roomTexts = <{ [key: string]: string }>{};
-
 io.on("connection", (socket) => {
   socket.on("join pad", async (joinCode) => {
     for (let room in socket.rooms) {
@@ -33,14 +31,6 @@ io.on("connection", (socket) => {
     }
 
     let code: string = joinCode || generatePadCode();
-
-    // const padDoesExist = Pad.exists({ padCode: code });
-
-    // if (!!padDoesExist) {
-    //   Pad.findOneAndUpdate({
-    //     padCode : code
-    //   }, );
-    // }
 
     socket.join(code);
     const foundPad = await Pad.findOne({ padCode: code }).lean();
@@ -62,18 +52,6 @@ io.on("connection", (socket) => {
       io.sockets.adapter.rooms.get(padCode)?.size
     );
   });
-
-  const debouncedSaveToDatabase = debounce(async function (padCode, text) {
-    const foundPad = await Pad.findOneAndUpdate(
-      { padCode: padCode },
-      {
-        text: text,
-      },
-      {
-        upsert: true,
-      }
-    );
-  }, 500);
 
   socket.on(
     "send text update",
