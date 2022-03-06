@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 mongoose.connect(
-  `mongodb+srv://writepadadmin:2P9t2LrzsdQamjmm@writepad.0eueb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+  process.env.MONGO_URI,
   (err) => {
     if (err) {
       return console.log(err.message);
