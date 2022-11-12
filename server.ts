@@ -13,6 +13,10 @@ dotenv.config();
 app.use(
   cors({
     origin: process.env.CLIENT_URI,
+    allowedHeaders: [
+      "Access-Control-Allow-Origin",
+      process.env.CLIENT_URI || "*",
+    ],
   })
 );
 require("./dbConnection");
