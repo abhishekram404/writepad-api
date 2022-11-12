@@ -7,11 +7,16 @@ import dotenv from "dotenv";
 import { generatePadCode } from "./utils/utils";
 import Pad from "./models/PadModel";
 import { debouncedSaveToDatabase } from "./utils/debouncedSaveToDatabase";
+import cors from "cors";
 dotenv.config();
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URI,
+  })
+);
 require("./dbConnection");
 
-const isProduction = process.env.NODE_ENV === "production";
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.CLIENT_URI,
