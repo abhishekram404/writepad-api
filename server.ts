@@ -14,9 +14,7 @@ require("./dbConnection");
 const isProduction = process.env.NODE_ENV === "production";
 const io = new Server(httpServer, {
   cors: {
-    origin: isProduction
-      ? "https://abhishekram-404-writepad.netlify.app"
-      : "http://localhost:3000",
+    origin: process.env.CLIENT_URI,
     allowedHeaders: ["Access-Control-Allow-Origin"],
     credentials: true,
   },
